@@ -1,0 +1,9 @@
+/_template
+/dota_2_client_flutter/lib/config
+/dota_2_client_flutter/lib/controller
+/dota_2_client_flutter/lib/database
+/dota_2_client_flutter/lib/model
+/dota_2_client_flutter/lib/storage
+/dota_2_client_flutter/lib/utility
+/dota_2_client_flutter/lib/view
+/dota_2_client_flutter/lib/widget
