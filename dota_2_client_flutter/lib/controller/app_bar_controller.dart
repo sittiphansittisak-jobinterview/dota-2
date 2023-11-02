@@ -9,8 +9,19 @@ import 'package:dota_2_client_flutter/config/sound_asset_path.dart';
 
 class AppBarController extends GetxController {
   //app bar initial
-  bool get isAllInitialized => _isSoundInitialized;
+  bool get isAllInitialized => _isTabControllerInitialized && _isSoundInitialized;
+  bool _isTabControllerInitialized = false;
   bool _isSoundInitialized = false;
+
+  String? initialTab({required Function({required String url}) updateIndexTabByUrl}) {
+    if (_isTabControllerInitialized) return 'ไม่สามารถโหลดข้อมูล tab ซ้ำได้';
+
+    this.updateIndexTabByUrl = updateIndexTabByUrl;
+
+    _isTabControllerInitialized = true;
+    if (isAllInitialized) update();
+    return null;
+  }
 
   Future<String?> initialSound() async {
     if (_isSoundInitialized) return 'ไม่สามารถโหลดข้อมูล sound ซ้ำได้';
@@ -37,22 +48,32 @@ class AppBarController extends GetxController {
     _soundStreamId = await _soundPool.play(await _pageMenuSound);
   }
 
-  //route URL
+  //page route URL
+  late final Function({required String url}) updateIndexTabByUrl;
   final previousPageList = <String>[];
   final forwardPageList = <String>[];
-  String _currentPageUrl = PageUrl.home;
+  String _currentPageUrl = PageUrl.index;
 
-  String get setCurrentPageUrl => _currentPageUrl;
+  String get currentPageUrl => _currentPageUrl;
 
-  set setCurrentPageUrl(String value) {
-    _currentPageUrl = PageUrl.isPageUrl(value) ? value : PageUrl.home;
+  set currentPageUrl(String value) {
+    _currentPageUrl = PageUrl.isPageUrl(value) ? value : PageUrl.index;
     _updateUrl();
+    _updateTab();
+  }
+
+  void _updateTab() {
+    String url = currentPageUrl;
+    if (PageUrl.heroSupPageList.contains(currentPageUrl)) {
+      url = PageUrl.hero;
+    }
+    updateIndexTabByUrl(url: url);
   }
 
   void _updateUrl() {
     String title = 'Dota 2';
-    switch (setCurrentPageUrl) {
-      case PageUrl.home:
+    switch (currentPageUrl) {
+      case PageUrl.index:
         title = 'Dota 2';
         break;
       case PageUrl.hero:
@@ -62,19 +83,19 @@ class AppBarController extends GetxController {
         title = 'Dota 2 - $itemPageText';
         break;
     }
-    window.history.replaceState(null, title, setCurrentPageUrl);
+    window.history.replaceState(null, title, currentPageUrl);
   }
 
-  void getCurrentPageUrlFromBrowser() {
-    final url = window.location.pathname;
+  void getCurrentPageUrlFromBrowser(String? url) {
+    url ??= window.location.pathname;
     if (!PageUrl.isPageUrl(url)) return;
-    setCurrentPageUrl = url!;
+    currentPageUrl = url!;
   }
 
   Future goToPreviousPage() async {
     if (previousPageList.isEmpty) return;
-    forwardPageList.add(setCurrentPageUrl);
-    setCurrentPageUrl = previousPageList.last;
+    forwardPageList.add(currentPageUrl);
+    currentPageUrl = previousPageList.last;
     previousPageList.removeLast();
     _playPageMenuSound();
     update();
@@ -82,35 +103,35 @@ class AppBarController extends GetxController {
 
   Future goToForwardPage() async {
     if (forwardPageList.isEmpty) return;
-    previousPageList.add(setCurrentPageUrl);
-    setCurrentPageUrl = forwardPageList.last;
+    previousPageList.add(currentPageUrl);
+    currentPageUrl = forwardPageList.last;
     forwardPageList.removeLast();
     _playPageMenuSound();
     update();
   }
 
   Future goToHomePage() async {
-    if (setCurrentPageUrl == PageUrl.home) return;
-    previousPageList.add(setCurrentPageUrl);
-    setCurrentPageUrl = PageUrl.home;
+    if (currentPageUrl == PageUrl.index) return;
+    previousPageList.add(currentPageUrl);
+    currentPageUrl = PageUrl.index;
     forwardPageList.clear();
     _playPageMenuSound();
     update();
   }
 
   Future goToHeroPage() async {
-    if (setCurrentPageUrl == PageUrl.hero) return;
-    previousPageList.add(setCurrentPageUrl);
-    setCurrentPageUrl = PageUrl.hero;
+    if (currentPageUrl == PageUrl.hero) return;
+    previousPageList.add(currentPageUrl);
+    currentPageUrl = PageUrl.hero;
     forwardPageList.clear();
     _playPageMenuSound();
     update();
   }
 
   Future goToItemPage() async {
-    if (setCurrentPageUrl == PageUrl.item) return;
-    previousPageList.add(setCurrentPageUrl);
-    setCurrentPageUrl = PageUrl.item;
+    if (currentPageUrl == PageUrl.item) return;
+    previousPageList.add(currentPageUrl);
+    currentPageUrl = PageUrl.item;
     forwardPageList.clear();
     _playPageMenuSound();
     update();

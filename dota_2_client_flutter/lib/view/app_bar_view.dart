@@ -188,8 +188,8 @@ class _AppBarViewState extends State<AppBarView> with SingleTickerProviderStateM
       child: GetBuilder<AppBarController>(
         init: _appBarController,
         builder: (controller) {
-          final url = controller.setCurrentPageUrl;
-          final isCurrentPage = url == PageUrl.home;
+          final url = controller.currentPageUrl;
+          final isCurrentPage = url == PageUrl.index;
 
           final homeMenuWidget = ShaderMask(
             shaderCallback: (Rect bounds) {
@@ -234,7 +234,7 @@ class _AppBarViewState extends State<AppBarView> with SingleTickerProviderStateM
     final heroMenuWidget = GetBuilder<AppBarController>(
       init: _appBarController,
       builder: (controller) => textMenuWidgetBuilder(
-        isHighlightText: controller.setCurrentPageUrl == PageUrl.hero,
+        isHighlightText: controller.currentPageUrl == PageUrl.hero,
         text: controller.heroPageText,
         onTap: controller.goToHeroPage,
       ),
@@ -242,7 +242,7 @@ class _AppBarViewState extends State<AppBarView> with SingleTickerProviderStateM
     final itemMenuWidget = GetBuilder<AppBarController>(
       init: _appBarController,
       builder: (controller) => textMenuWidgetBuilder(
-        isHighlightText: controller.setCurrentPageUrl == PageUrl.item,
+        isHighlightText: controller.currentPageUrl == PageUrl.item,
         text: controller.itemPageText,
         onTap: controller.goToItemPage,
       ),

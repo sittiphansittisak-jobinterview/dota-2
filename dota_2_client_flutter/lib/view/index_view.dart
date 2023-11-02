@@ -12,9 +12,9 @@ import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
 class IndexView extends StatefulWidget {
-  final bool isInitial;
+  final String url;
 
-  const IndexView({super.key, this.isInitial = false});
+  const IndexView({super.key, required this.url});
 
   @override
   State<IndexView> createState() => _IndexViewState();
@@ -24,12 +24,18 @@ class _IndexViewState extends State<IndexView> with SingleTickerProviderStateMix
   //controller
   final _indexController = Get.put(IndexController());
   final _appBarController = Get.put(AppBarController());
-  late final _tabController = TabController(length: _pageMap.length, vsync: this /*, animationDuration: const Duration(microseconds: 1)*/);
+  late final _tabController = TabController(length: _pageMap.length, vsync: this);
+
+  //logic function
+  void _updateIndexTabByUrl({required String url}) {
+    final index = _pageMap.keys.toList().indexOf(url);
+    if (index == -1) return; //for some url that I don't want to change tab.
+    _tabController.animateTo(index);
+  }
 
   //widget
-  late final _appBarWidget = const AppBarView();
   final _pageMap = {
-    PageUrl.home: const HomePageView(),
+    PageUrl.index: const HomePageView(),
     PageUrl.hero: const HeroPageView(),
     PageUrl.item: const ItemPageView(),
   };
@@ -37,18 +43,27 @@ class _IndexViewState extends State<IndexView> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    if (!widget.isInitial) return;
+    final url = widget.url; //to prevent widget.url that will auto change to '/' from not using the route in the MaterialApp.
     Future.delayed(Duration.zero, () async {
-      _appBarController.getCurrentPageUrlFromBrowser();
-      final initialResultList = await Future.wait([
-        _indexController.initialAsset(context),
-        _indexController.initialHeroThumbnail(),
-        _appBarController.initialSound(),
-      ]);
-
+      final initialResultList = [
+        _appBarController.initialTab(updateIndexTabByUrl: _updateIndexTabByUrl),
+        ...await Future.wait([
+          _indexController.initialAsset(context),
+          _indexController.initialHeroThumbnail(),
+          _appBarController.initialSound(),
+        ]),
+      ];
       initialResultList.whereType<String>().forEach((debugPrint)); //to track error
       _indexController.initialFinish();
+
+      _appBarController.getCurrentPageUrlFromBrowser(url);
     });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -94,24 +109,18 @@ class _IndexViewState extends State<IndexView> with SingleTickerProviderStateMix
         }
 
         //If app is initialized and the user has seen the intro video, show main page
-        return GetBuilder<AppBarController>(
-          init: _appBarController,
-          builder: (appBarController) {
-            _tabController.animateTo(_pageMap.keys.toList().indexOf(appBarController.setCurrentPageUrl));
-            return SafeArea(
-              child: Scaffold(
-                appBar: _appBarWidget,
-                backgroundColor: Colors.black,
-                body: DefaultTabController(
-                  length: _pageMap.length,
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: _pageMap.values.toList(),
-                  ),
-                ),
+        return SafeArea(
+          child: Scaffold(
+            appBar: const AppBarView(),
+            backgroundColor: Colors.black,
+            body: DefaultTabController(
+              length: _pageMap.length,
+              child: TabBarView(
+                controller: _tabController,
+                children: _pageMap.values.toList(),
               ),
-            );
-          },
+            ),
+          ),
         );
       },
     );

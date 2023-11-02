@@ -31,8 +31,7 @@ class IndexController extends GetxController {
     introVideo.addListener(() {
       //If video play finish, set isUserSeenIntroVideo to true
       if (_isIntroVideoPlayed && !introVideo.value.isPlaying && !introVideo.value.isBuffering) {
-        isUserSeenIntroVideo = true;
-        update();
+        closeIntroVideo();
       }
     });
 
@@ -70,9 +69,9 @@ class IndexController extends GetxController {
 
   Future closeIntroVideo() async {
     if (isUserSeenIntroVideo) return;
+    isUserSeenIntroVideo = true;
     await introVideo.pause();
     await introVideo.dispose();
-    isUserSeenIntroVideo = true;
     update();
   }
 }

@@ -12,7 +12,9 @@ class _ItemPageViewState extends State<ItemPageView> with AutomaticKeepAliveClie
   Widget build(BuildContext context) {
     super.build(context);
 
-    return const Center();
+    return const Center(
+      child: Text('ItemPageView'),
+    );
   }
 
   @override

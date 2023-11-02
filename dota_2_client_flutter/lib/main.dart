@@ -1,6 +1,7 @@
 import 'package:dota_2_client_flutter/config/page_url.dart';
 import 'package:dota_2_client_flutter/view/index_view.dart';
 import 'package:flutter/material.dart';
+import 'package:universal_html/html.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 void main() {
@@ -23,12 +24,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
-      home: const IndexView(isInitial: true),
-      //this routes is fixing the issue of the navigation on the web when open the app from a url
-      routes: {
-        PageUrl.hero: (context) => const IndexView(),
-        PageUrl.item: (context) => const IndexView(),
-      },
+      home: IndexView(url: window.location.pathname ?? PageUrl.index), //Using route will make the overlapping of the home page when open routes these are not the home page.
     );
   }
 }
