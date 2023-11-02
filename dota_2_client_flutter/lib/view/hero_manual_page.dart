@@ -7,11 +7,18 @@ class HeroManualPage extends StatefulWidget {
   State<HeroManualPage> createState() => _HeroManualPageState();
 }
 
-class _HeroManualPageState extends State<HeroManualPage> {
+class _HeroManualPageState extends State<HeroManualPage> with AutomaticKeepAliveClientMixin<HeroManualPage> {
+  final _now = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('HeroManualPage'),
+    super.build(context);
+
+    return Center(
+      child: Text('HeroManualPage: $_now'),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

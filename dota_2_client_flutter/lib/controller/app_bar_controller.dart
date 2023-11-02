@@ -52,28 +52,24 @@ class AppBarController extends GetxController {
   late final Function({required String url}) updateIndexTabByUrl;
   final previousPageList = <String>[];
   final forwardPageList = <String>[];
-  String _currentPageUrl = PageUrl.index;
+  String _currentPageUrl = PageUrl.home;
 
   String get currentPageUrl => _currentPageUrl;
 
   set currentPageUrl(String value) {
-    _currentPageUrl = PageUrl.isPageUrl(value) ? value : PageUrl.index;
+    _currentPageUrl = PageUrl.isPageUrl(value) ? value : PageUrl.home;
     _updateUrl();
     _updateTab();
   }
 
   void _updateTab() {
-    String url = currentPageUrl;
-    if (PageUrl.heroSupPageList.contains(currentPageUrl)) {
-      url = PageUrl.hero;
-    }
-    updateIndexTabByUrl(url: url);
+    updateIndexTabByUrl(url: currentPageUrl);
   }
 
   void _updateUrl() {
     String title = 'Dota 2';
     switch (currentPageUrl) {
-      case PageUrl.index:
+      case PageUrl.home:
         title = 'Dota 2';
         break;
       case PageUrl.hero:
@@ -111,9 +107,9 @@ class AppBarController extends GetxController {
   }
 
   Future goToHomePage() async {
-    if (currentPageUrl == PageUrl.index) return;
+    if (currentPageUrl == PageUrl.home) return;
     previousPageList.add(currentPageUrl);
-    currentPageUrl = PageUrl.index;
+    currentPageUrl = PageUrl.home;
     forwardPageList.clear();
     _playPageMenuSound();
     update();

@@ -8,12 +8,14 @@ class ItemPageView extends StatefulWidget {
 }
 
 class _ItemPageViewState extends State<ItemPageView> with AutomaticKeepAliveClientMixin<ItemPageView> {
+  final _now = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    return const Center(
-      child: Text('ItemPageView'),
+    return Center(
+      child: Text('ItemPageView: $_now'),
     );
   }
 

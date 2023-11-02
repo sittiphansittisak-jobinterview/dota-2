@@ -35,8 +35,10 @@ class _IndexViewState extends State<IndexView> with SingleTickerProviderStateMix
 
   //widget
   final _pageMap = {
-    PageUrl.index: const HomePageView(),
-    PageUrl.hero: const HeroPageView(),
+    PageUrl.home: const HomePageView(),
+    PageUrl.hero: const HeroPageView(url: PageUrl.hero),
+    //PageUrl.heroOverall: const HeroPageView(page: PageUrl.heroOverall),
+    PageUrl.heroManual: const HeroPageView(url: PageUrl.heroManual),
     PageUrl.item: const ItemPageView(),
   };
 

@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
-      home: IndexView(url: window.location.pathname ?? PageUrl.index), //Using route will make the overlapping of the home page when open routes these are not the home page.
+      home: IndexView(url: window.location.pathname ?? PageUrl.home), //Using route will make the overlapping of the home page when open routes these are not the home page.
     );
   }
 }

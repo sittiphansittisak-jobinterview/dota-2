@@ -189,7 +189,7 @@ class _AppBarViewState extends State<AppBarView> with SingleTickerProviderStateM
         init: _appBarController,
         builder: (controller) {
           final url = controller.currentPageUrl;
-          final isCurrentPage = url == PageUrl.index;
+          final isCurrentPage = url == PageUrl.home;
 
           final homeMenuWidget = ShaderMask(
             shaderCallback: (Rect bounds) {
