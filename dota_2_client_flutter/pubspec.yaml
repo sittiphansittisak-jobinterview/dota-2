@@ -80,7 +80,7 @@ flutter:
     - asset/image/app_bar/
     - asset/image/home_page/
     - asset/video/
-    - asset/video/hero/
+    - asset/video/hero_page/
     - asset/sound/
     - asset/sound/app_bar/
 

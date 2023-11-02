@@ -15,20 +15,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Dota 2',
-        theme: ThemeData(
-          brightness: Brightness.light,
-          useMaterial3: true,
-        ),
-        darkTheme: ThemeData(brightness: Brightness.dark),
-        themeMode: ThemeMode.dark,
-        debugShowCheckedModeBanner: false,
-        home: const IndexView(isInitial: true),
-        //this routes is fixing the issue of the navigation on the web when open the app from a url
-        routes: {
-          PageUrl.hero: (context) => const IndexView(),
-          PageUrl.item: (context) => const IndexView(),
-        },
+      title: 'Dota 2',
+      theme: ThemeData(
+        brightness: Brightness.light,
+        useMaterial3: true,
+      ),
+      darkTheme: ThemeData(brightness: Brightness.dark),
+      themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+      home: const IndexView(isInitial: true),
+      //this routes is fixing the issue of the navigation on the web when open the app from a url
+      routes: {
+        PageUrl.hero: (context) => const IndexView(),
+        PageUrl.item: (context) => const IndexView(),
+      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dota_2_client_flutter/config/image_asset_path.dart';
 import 'package:dota_2_client_flutter/config/page_url.dart';
 import 'package:dota_2_client_flutter/config/sound_asset_path.dart';
+import 'package:dota_2_client_flutter/config/video_asset_path.dart';
 import 'package:dota_2_client_flutter/database/hero_database.dart';
 import 'package:dota_2_client_flutter/storage/hero_thumbnail_storage.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,7 @@ class IndexController extends GetxController {
   }
 
   //intro video
-  final introVideo = VideoPlayerController.asset('asset/video/dota_2_opening.mp4');
+  final introVideo = VideoPlayerController.asset(VideoAssetPath.dota2Intro);
   bool _isIntroVideoPlayed = false; //prevent skipping the intro video with addListener
   bool isUserSeenIntroVideo = false;
 
