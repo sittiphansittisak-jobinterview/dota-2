@@ -1,8 +1,8 @@
 import 'package:dota_2_client_flutter/config/font_family_style.dart';
 import 'package:dota_2_client_flutter/config/image_asset_path.dart';
 import 'package:dota_2_client_flutter/config/page_url.dart';
+import 'package:dota_2_client_flutter/controller/app_bar_controller.dart';
 import 'package:dota_2_client_flutter/controller/dota_plus_controller.dart';
-import 'package:dota_2_client_flutter/controller/index_controller.dart';
 import 'package:dota_2_client_flutter/utility/string_formatter.dart';
 import 'package:dota_2_client_flutter/widget/container/clip_shadow_path_widget.dart';
 import 'package:dota_2_client_flutter/widget/dialog/show_question_yes_no_dialog.dart';
@@ -21,7 +21,7 @@ class AppBarView extends StatefulWidget implements PreferredSizeWidget {
 
 class _AppBarViewState extends State<AppBarView> with SingleTickerProviderStateMixin {
   //controller
-  final _indexController = Get.put(IndexController());
+  final _appBarController = Get.put(AppBarController());
   final _dotaPlusController = Get.put(DotaPlusController())..getPoint();
   late int _dotaPlusOldPoint = _dotaPlusController.point;
   final _isMouseOverHomeButton = Rx(false);
@@ -154,8 +154,8 @@ class _AppBarViewState extends State<AppBarView> with SingleTickerProviderStateM
     );
     final verticalDivider1Widget = Container(width: 1, height: 45, color: const Color.fromRGBO(0, 0, 0, 1));
     final verticalDivider2Widget = Container(width: 1, height: 45, color: const Color.fromRGBO(48, 44, 44, 1));
-    final previousButtonWidget = GetBuilder<IndexController>(
-      init: _indexController,
+    final previousButtonWidget = GetBuilder<AppBarController>(
+      init: _appBarController,
       builder: (controller) {
         final canClick = controller.previousPageList.isNotEmpty;
         if (!canClick) return SizedBox(width: pageRouteButtonWidth, child: Image.asset(ImageAssetPath.appBar.previousMenu, color: imageMenuMuteColor, width: imageMenuNavigatorWidth));
@@ -167,8 +167,8 @@ class _AppBarViewState extends State<AppBarView> with SingleTickerProviderStateM
         );
       },
     );
-    final forwardButtonWidget = GetBuilder<IndexController>(
-      init: _indexController,
+    final forwardButtonWidget = GetBuilder<AppBarController>(
+      init: _appBarController,
       builder: (controller) {
         final canClick = controller.forwardPageList.isNotEmpty;
         if (!canClick) return SizedBox(width: pageRouteButtonWidth, child: Image.asset(ImageAssetPath.appBar.forwardMenu, color: imageMenuMuteColor, width: imageMenuNavigatorWidth));
@@ -184,11 +184,11 @@ class _AppBarViewState extends State<AppBarView> with SingleTickerProviderStateM
     final homeMenuAreaWidget = ClipShadowPathWidget(clipper: _HomeMenuClipper2(), border: Border.all(color: imageMenuHomeButtonAreaColor, width: 5), shadow: imageMenuHomeAreaShadow, child: Container(width: 215, height: 100, color: imageMenuHomeButtonAreaColor));
     final homeMenuWidget = InkWell(
       onHover: (value) => _isMouseOverHomeButton.value = value,
-      onTap: _indexController.goToHomePage,
-      child: GetBuilder<IndexController>(
-        init: _indexController,
+      onTap: _appBarController.goToHomePage,
+      child: GetBuilder<AppBarController>(
+        init: _appBarController,
         builder: (controller) {
-          final url = controller.currentPageUrl;
+          final url = controller.setCurrentPageUrl;
           final isCurrentPage = url == PageUrl.home;
 
           final homeMenuWidget = ShaderMask(
@@ -231,18 +231,18 @@ class _AppBarViewState extends State<AppBarView> with SingleTickerProviderStateM
         },
       ),
     );
-    final heroMenuWidget = GetBuilder(
-      init: _indexController,
+    final heroMenuWidget = GetBuilder<AppBarController>(
+      init: _appBarController,
       builder: (controller) => textMenuWidgetBuilder(
-        isHighlightText: controller.currentPageUrl == PageUrl.hero,
+        isHighlightText: controller.setCurrentPageUrl == PageUrl.hero,
         text: controller.heroPageText,
         onTap: controller.goToHeroPage,
       ),
     );
-    final itemMenuWidget = GetBuilder(
-      init: _indexController,
+    final itemMenuWidget = GetBuilder<AppBarController>(
+      init: _appBarController,
       builder: (controller) => textMenuWidgetBuilder(
-        isHighlightText: controller.currentPageUrl == PageUrl.item,
+        isHighlightText: controller.setCurrentPageUrl == PageUrl.item,
         text: controller.itemPageText,
         onTap: controller.goToItemPage,
       ),
@@ -332,7 +332,7 @@ class _AppBarViewState extends State<AppBarView> with SingleTickerProviderStateM
       clipper: _MenuFarRightClipper(),
       border: Border.all(color: const Color.fromRGBO(70, 28, 28, 1), width: 4),
       child: InkWell(
-        onTap: () async => (await showQuestionYesNoDialog(context: context, title: 'ยืนยันการออก', detail: 'คุณต้องการจะออกจาก Dota 2 หรือไม่?', yesText: 'ใช่', noText: 'ไม่') ?? false) ? _indexController.closeApp() : null,
+        onTap: () async => (await showQuestionYesNoDialog(context: context, title: 'ยืนยันการออก', detail: 'คุณต้องการจะออกจาก Dota 2 หรือไม่?', yesText: 'ใช่', noText: 'ไม่') ?? false) ? _appBarController.closeApp() : null,
         onHover: (value) => _isMouseOverExitButton.value = value,
         child: Container(
           alignment: Alignment.center,
