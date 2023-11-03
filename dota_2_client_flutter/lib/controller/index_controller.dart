@@ -46,10 +46,7 @@ class IndexController extends GetxController {
     //all thumbnail hero
     final heroThumbnailList = await HeroDatabase.getThumbnailList();
     if (heroThumbnailList == null) return 'เกิดข้อผิดพลาดในการโหลดข้อมูล hero thumbnail';
-    HeroThumbnailStorage.list.addAll(heroThumbnailList);
-    for (int index = 0; index < HeroThumbnailStorage.list.length; index++) {
-      await HeroThumbnailStorage.list[index].video.initialize();
-    }
+    if (!await HeroThumbnailStorage.saveAndInitialHeroThumbnail(heroThumbnailList)) return 'เกิดข้อผิดพลาดในการบันทึกข้อมูล hero thumbnail';
 
     _isHeroThumbnailInitializationSuccess = true;
     if (isAllInitialized) update();

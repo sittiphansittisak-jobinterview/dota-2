@@ -4,7 +4,7 @@ import 'package:dota_2_client_flutter/model/hero_thumbnail_model.dart';
 
 class HeroDatabase {
   static Future<List<HeroThumbnailModel>?> getThumbnailList() async {
-    final data = HeroName.list
+    final data = HeroName.basicList
         .map<Map<String, dynamic>>((e) => {
               'name': e,
               'video': VideoAssetPath.heroPage.getPathByHeroName(e),
